@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h2 class="text-center mb-4">Construa sua Casa</h2>
+
+        <div class="d-flex justify-content-center gap-3 mb-4">
+            <button class="btn btn-primary" onclick="construirCasa('simples')">
+                Construir Casa Simples
+            </button>
+            <button class="btn btn-success" onclick="construirCasa('garagem')">
+                Construir Casa com Garagem
+            </button>
+        </div>
+
+        <div class="card shadow-sm">
+            <div class="card-header bg-dark text-white">
+                <h3 class="mb-0">Casas Construídas</h3>
+            </div>
+            <div class="card-body">
+                <ul id="lista-casas" class="list-group">
+                    {% for casa in casas %}
+                        <li class="list-group-item">
+                            <strong>Casa:</strong><br>
+                            Estrutura: {{ casa.estrutura }},<br>
+                            Portas: {{ casa.portas }},<br> 
+                            Janelas: {{ casa.janelas }},<br> 
+                            Telhado: {{ casa.telhado }},<br> 
+                            Extra: {{ casa.extra }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function construirCasa(tipo) {
+            fetch("{{ path('casa_construir') }}", {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: 'tipo=' + tipo
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.status);
+                atualizarLista(data.casa);
+            });
+        }
+
+        function atualizarLista(casa) {
+            let lista = document.getElementById('lista-casas');
+            let item = document.createElement('li');
+            item.className = "list-group-item";
+            item.innerHTML = `<strong>Casa:</strong> <br>
+                Estrutura: ${casa.estrutura}, <br>
+                Portas: ${casa.portas}, <br>
+                Janelas: ${casa.janelas}, <br>
+                Telhado: ${casa.telhado}, <br>
+                Extra: ${casa.extra}`;
+            lista.appendChild(item);
+        }
+    </script>
+{% endblock %}

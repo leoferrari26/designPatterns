@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Logística de Transporte</h1>
+
+        <div class="card shadow p-4">
+            <form id="logisticaForm">
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="peso" class="form-label">Peso (kg)</label>
+                        <input type="number" class="form-control" id="peso" name="peso" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="altura" class="form-label">Altura (m)</label>
+                        <input type="number" class="form-control" id="altura" step="0.01" name="altura" required>
+                    </div>
+                </div>
+                
+                <div class="row mt-3">
+                    <div class="col-md-6">
+                        <label for="largura" class="form-label">Largura (m)</label>
+                        <input type="number" class="form-control" id="largura" step="0.01" name="largura" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="km" class="form-label">Distância (km)</label>
+                        <input type="number" class="form-control" id="km" name="km" required>
+                    </div>
+                </div>
+
+                <div class="form-check form-switch mt-3">
+                    <input class="form-check-input" type="checkbox" id="atravessaOceano" name="atravessaOceano">
+                    <label class="form-check-label" for="atravessaOceano">Atravessa Oceano?</label>
+                </div>
+
+                <button type="submit" class="btn btn-primary mt-4 w-100">Calcular Transporte</button>
+            </form>
+        </div>
+
+        <div id="resultado" class="alert alert-info mt-4 text-center" style="display: none;"></div>
+    </div>
+
+    <script>
+        document.getElementById("logisticaForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            let formData = new FormData(this);
+
+            fetch("{{ path('app_method_factory') }}", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                let resultado = document.getElementById("resultado");
+                resultado.style.display = "block";
+                resultado.innerHTML = `<strong>${data.message}</strong>`;
+            })
+            .catch(error => console.error("Erro:", error));
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,20 @@
+{
+    "tv": {
+        "device": "tv",
+        "power": true,
+        "volume": 100,
+        "channel": 20
+    },
+    "radio": {
+        "device": "radio",
+        "power": true,
+        "volume": 50,
+        "channel": 7
+    },
+    "": {
+        "device": null,
+        "power": true,
+        "volume": 70,
+        "channel": 1
+    }
+}
